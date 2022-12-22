@@ -14,6 +14,7 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start emporium --watch",
     "start:identity": "nest start identity --watch",
+    "start:notification": "nest start notification --watch",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

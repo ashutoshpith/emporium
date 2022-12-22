@@ -1,14 +1,14 @@
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
-export class NotificationResolver {
+export class ProductResolver {
   @Query(() => Boolean)
-  signIn() {
+  prodcutIn() {
     return true;
   }
 
   @Mutation(() => Boolean)
-  signUp() {
+  productUp() {
     return true;
   }
 }
