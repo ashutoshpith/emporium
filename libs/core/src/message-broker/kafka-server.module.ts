@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { KafkaServerService } from './kafka-server.service';
 import { TKafka } from './kafka.type';
 
 export const listenKafkaServer = async (
@@ -7,11 +8,10 @@ export const listenKafkaServer = async (
   cargo: TKafka,
 ): Promise<void> => {
   app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
+    strategy: new KafkaServerService({
       client: {
         clientId: cargo.clientId,
-        brokers: process.env.KAKFA_URL.split(','),
+        brokers: process.env.KAFKA_URL.split(','),
         ssl: true,
         sasl: {
           mechanism: process.env.KAFKA_SASL_MECHANISM as any, // scram-sha-256 or scram-sha-256
@@ -19,11 +19,12 @@ export const listenKafkaServer = async (
           password: process.env.KAFKA_PASSWORD,
         },
       },
+
       consumer: {
         groupId: cargo.groupId,
-        // allowAutoTopicCreation: true,
+        allowAutoTopicCreation: false,
       },
-    },
+    }),
   });
   await app.startAllMicroservices();
 };

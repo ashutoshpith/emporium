@@ -1,9 +1,9 @@
 import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
+import { KafkaClientService } from './kafka-clinet.service';
 
 export class KafkaProducer implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(KafkaProducer.name);
-  constructor(public client: ClientKafka, public topic: string) {}
+  readonly logger = new Logger(KafkaProducer.name);
+  constructor(protected client: KafkaClientService, public topic: string) {}
 
   async onModuleDestroy() {
     await this.client.close();

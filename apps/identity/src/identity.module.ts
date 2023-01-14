@@ -14,7 +14,6 @@ import { modules } from './module';
       driver: ApolloDriver,
       playground: true,
       debug: true,
-      // modules: [],
       include: [...modules],
       introspection: true,
       autoSchemaFile: true,

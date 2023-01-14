@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { NotificationService } from './notification.service';
+import { Controller } from '@nestjs/common';
+import {
+  Ctx,
+  EventPattern,
+  KafkaContext,
+  Payload,
+} from '@nestjs/microservices';
 
 @Controller()
 export class NotificationController {
-  constructor(private readonly notificationService: NotificationService) {}
+  @EventPattern('identity_topic')
+  getHello(@Payload() message: any, @Ctx() context: KafkaContext) {
+    console.log('hello in', context, message);
 
-  @Get()
-  getHello(): string {
-    return this.notificationService.getHello();
+    return true;
   }
 }
