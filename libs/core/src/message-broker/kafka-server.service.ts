@@ -6,4 +6,10 @@ export class KafkaServerService extends ServerKafka {
 
     super(options);
   }
+
+  sets() {
+    console.log('Bajla salal');
+
+    return 'hello';
+  }
 }

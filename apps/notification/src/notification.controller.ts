@@ -11,7 +11,6 @@ export class NotificationController {
   @EventPattern('identity_topic')
   getHello(@Payload() message: any, @Ctx() context: KafkaContext) {
     console.log('hello in', context, message);
-
     return true;
   }
 }

@@ -1,4 +1,4 @@
-export interface TKafka {
+export type TKafka = {
   message?: string;
   name?: string;
   clientId?: string;
@@ -6,4 +6,5 @@ export interface TKafka {
   brokerId?: string[];
   topic?: string;
   providers?: any[];
-}
+  clinetIds?: string[];
+};

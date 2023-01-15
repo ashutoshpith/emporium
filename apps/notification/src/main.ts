@@ -8,8 +8,9 @@ async function bootstrap() {
 
   listenKafkaServer(app, {
     // topic: process.env.IDENTITY_TOPIC,
-    clientId: process.env.IDENTITY_KAFKA_CLIENT_ID,
+    // clientId: process.env.IDENTITY_KAFKA_CLIENT_ID,
     groupId: process.env.IDENTITY_KAFKA_GROUP_ID,
+    // clinetIds: [process.env.IDENTITY_KAFKA_CLIENT_ID, 'identity-notification'],
   });
 }
 bootstrap();
