@@ -18,10 +18,7 @@ export class KafkaClientModule {
               brokers: process.env.KAFKA_URL.split(','),
               clientId: cargo.clientId,
               ssl: true,
-              retry: {
-                initialRetryTime: 100,
-                retries: 8,
-              },
+              connectionTimeout: 40000,
               sasl: {
                 mechanism: process.env.KAFKA_SASL_MECHANISM as any, // scram-sha-256 or scram-sha-256
                 username: process.env.KAFKA_USER_NAME,
@@ -29,7 +26,7 @@ export class KafkaClientModule {
               },
             },
             consumer: {
-              allowAutoTopicCreation: true,
+              allowAutoTopicCreation: false,
               groupId: cargo.groupId,
             },
           }),
