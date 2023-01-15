@@ -1,5 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { logLevel } from '@nestjs/microservices/external/kafka.interface';
 import { KafkaClientService } from './kafka-clinet.service';
 import { TKafka } from './kafka.type';
 
@@ -24,6 +25,7 @@ export class KafkaClientModule {
                 username: process.env.KAFKA_USER_NAME,
                 password: process.env.KAFKA_PASSWORD,
               },
+              // logLevel: logLevel.DEBUG,
             },
             consumer: {
               allowAutoTopicCreation: false,

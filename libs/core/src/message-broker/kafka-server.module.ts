@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
+import { logLevel } from '@nestjs/microservices/external/kafka.interface';
 import { KafkaServerService } from './kafka-server.service';
 import { TKafka } from './kafka.type';
 
@@ -19,6 +20,7 @@ export const listenKafkaServer = async (
           password: process.env.KAFKA_PASSWORD,
         },
         connectionTimeout: 40000,
+        // logLevel: logLevel.DEBUG,
       },
       consumer: {
         groupId: cargo.groupId,
