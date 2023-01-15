@@ -1,4 +1,4 @@
-import { BasePaginationInputDtoType } from '@libs/core/dto/base-pagination-query.dto';
+import { BasePaginationInputDtoType } from '@core/core/dto/base-pagination-query.dto';
 import { NotFoundException } from '@nestjs/common';
 import { Document, FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 
@@ -11,7 +11,7 @@ export class FindProps {
   orderBy: OrderBy;
   limit: number;
 }
-export abstract class BaseRepo<TDoc extends Document> {
+export abstract class BaseRepo<TDoc extends Document<any>> {
   constructor(protected model: Model<TDoc>) {}
 
   newId(): string {
@@ -84,7 +84,7 @@ export abstract class BaseRepo<TDoc extends Document> {
     if (!res) {
       throw new NotFoundException(['Not Found']);
     }
-    await res?.updateOne(fields);
+    await res?.updateOne({ fields });
     return res._id;
   }
 }

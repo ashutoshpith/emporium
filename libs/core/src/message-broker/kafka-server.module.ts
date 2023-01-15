@@ -18,7 +18,7 @@ export const listenKafkaServer = async (
           username: process.env.KAFKA_USER_NAME,
           password: process.env.KAFKA_PASSWORD,
         },
-        connectionTimeout: 40000,
+        connectionTimeout: 90000,
       },
       consumer: {
         groupId: cargo.groupId,

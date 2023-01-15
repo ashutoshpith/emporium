@@ -1,4 +1,10 @@
-import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+  Optional,
+} from '@nestjs/common';
 import { KafkaClientService } from './kafka-clinet.service';
 
 export enum KafkaPartitionService {
@@ -10,9 +16,14 @@ export const KafkaServicePartition = {
   [0]: 'IDENTITY_SERVICE',
   [1]: 'NOTIFICATION_SERVICE',
 };
+
+@Injectable()
 export class KafkaProducer implements OnModuleInit, OnModuleDestroy {
   readonly logger = new Logger(KafkaProducer.name);
-  constructor(protected client: KafkaClientService, public topic: string) {}
+  constructor(
+    protected client: KafkaClientService,
+    @Optional() public topic: string,
+  ) {}
 
   async onModuleDestroy() {
     await this.client.close();
@@ -34,6 +45,11 @@ export class KafkaProducer implements OnModuleInit, OnModuleDestroy {
     this.client.emit<boolean>(this.topic, message);
     this.logger.log(`sendMessageEvent ${this.topic}`);
     return;
+  }
+
+  async emitEvent(message: any) {
+    this.client.emit<boolean>(this.client.topic, message);
+    this.logger.log(`emitEvent ${this.client.topic} ${message}`);
   }
 
   async sendMessage(data: any) {
