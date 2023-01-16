@@ -3,7 +3,6 @@ import {
   IdentityUpdatedEvent,
 } from '@core/core/event-sourcing/domain-event';
 import { IModel, IModelState } from '@core/core/model';
-import { Logger } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export interface IIdentityModel extends IModelState {
@@ -22,6 +21,7 @@ export class IdentityModel
 
   constructor(_id: string) {
     super();
+    this.autoCommit = true;
     this.state._id = _id;
   }
 

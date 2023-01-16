@@ -1,4 +1,3 @@
-import { IdentityUpdatedEvent } from '@core/core/event-sourcing/domain-event';
 import { DomainEventPublisher } from '@core/core/event-sourcing/domain-event-publisher';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { IdentityUpdateCommand } from '../command/identity-update.command';
@@ -18,7 +17,6 @@ export class IdentityUpdateHandler
     const model = this.publisher.mergeObjectContext(
       await this.repository.findFromEventStore(_id),
     );
-    console.log('model 1', model);
 
     model.updateEntry('me', { phnNumber });
     await this.repository.updateOne(
@@ -27,12 +25,8 @@ export class IdentityUpdateHandler
       },
       model.state,
     );
-    console.log('model 2 ', model);
+    // model.commit();
 
-    model.commit();
-    model.publish(
-      new IdentityUpdatedEvent('me', model.state._id, model.state, []),
-    );
     return;
   }
 }
