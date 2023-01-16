@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { IEvent, AggregateRoot } from '@nestjs/cqrs';
 import { DomainEventBus } from './domain-event-bus';
 
@@ -8,6 +8,7 @@ export interface Constructor<T> {
 
 @Injectable()
 export class DomainEventPublisher {
+  private readonly logger = new Logger(DomainEventPublisher.name);
   constructor(private readonly eventBus: DomainEventBus) {}
 
   mergeClassContext<T extends Constructor<AggregateRoot>>(metatype: T): T {
@@ -21,8 +22,7 @@ export class DomainEventPublisher {
 
   mergeObjectContext<T extends AggregateRoot>(object: T): T {
     const eventBus = this.eventBus;
-    console.log('in');
-
+    this.logger.verbose('mergeObjectContext');
     object.publish = (event: IEvent) => {
       eventBus.publish(event);
     };

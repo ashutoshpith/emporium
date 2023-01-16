@@ -1,3 +1,4 @@
+import { DomainEventSourcingModule } from '@core/core/message-broker';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -11,8 +12,13 @@ import { modules } from './modules';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ...modules,
-    MongooseModule.forRoot('mongodb://localhost:27017', {
-      dbName: 'iam',
+    MongooseModule.forRoot('mongodb://localhost:27017/iam'),
+    DomainEventSourcingModule.forRoot({
+      name: 'Auth',
+      // topic: process.env.IDENTITY_TOPIC,
+      clientId: process.env.IDENTITY_KAFKA_CLIENT_ID,
+      groupId: process.env.IDENTITY_KAFKA_GROUP_ID,
+      topic: 'identity_topic',
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

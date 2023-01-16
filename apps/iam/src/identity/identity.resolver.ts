@@ -19,4 +19,11 @@ export class IdentityResolver {
   signUp() {
     return true;
   }
+
+  @Mutation(() => Boolean)
+  async updatephn() {
+    await this.identityService.update();
+
+    return true;
+  }
 }

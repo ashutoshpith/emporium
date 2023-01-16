@@ -2,8 +2,8 @@ import {
   AggregateRepository,
   ViewEventBus,
   ViewUpdater,
-  // EventStore,
-} from 'event-sourcing-nestjs';
+  EventStore,
+} from '@berniemac/event-sourcing-nestjs';
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -14,11 +14,10 @@ import { ESRepo } from '../event-sourcing/es.repo';
 import { ES, ESSchema } from '../event-sourcing/es.schema';
 import { KafkaClientService } from './kafka-clinet.service';
 import { TKafka } from './kafka.type';
-import { EventStore } from '../event-sourcing/es';
 import { KafkaProducer } from './kafka.producer';
 
 @Module({})
-export class KafkaClientModule {
+export class DomainEventSourcingModule {
   static forRoot(cargo: TKafka): DynamicModule {
     const imports: any = [
       ConfigModule.forRoot({ isGlobal: true }),
@@ -28,9 +27,6 @@ export class KafkaClientModule {
       DomainEventBus,
       DomainEventPublisher,
       ESRepo,
-      ViewUpdater,
-      ViewEventBus,
-      // AggregateRepository,
       KafkaProducer,
     ] as any;
     const exports = [
@@ -39,11 +35,7 @@ export class KafkaClientModule {
       DomainEventPublisher,
       EventStore,
       ESRepo,
-      ViewUpdater,
-      ViewEventBus,
       KafkaProducer,
-
-      // AggregateRepository,
     ] as any;
 
     imports.push(
@@ -55,7 +47,9 @@ export class KafkaClientModule {
 
     providers.push({
       provide: EventStore,
-      useValue: new EventStore(),
+      useValue: new EventStore({
+        mongoURL: 'mongodb://localhost:27017/eventstore',
+      }),
     });
 
     providers.push({
@@ -85,7 +79,7 @@ export class KafkaClientModule {
 
     return {
       global: true,
-      module: KafkaClientModule,
+      module: DomainEventSourcingModule,
       imports,
       providers,
       exports,
@@ -94,25 +88,23 @@ export class KafkaClientModule {
 
   static forFeature(): DynamicModule {
     return {
-      module: KafkaClientModule,
+      module: DomainEventSourcingModule,
       imports: [CqrsModule],
       providers: [
-        EventStore,
         ViewUpdater,
         ViewEventBus,
         DomainEventBus,
         DomainEventPublisher,
-        // AggregateRepository,
+        AggregateRepository,
         KafkaClientService,
       ],
       exports: [
         KafkaClientService,
-        EventStore,
         ViewUpdater,
         ViewEventBus,
         DomainEventBus,
         DomainEventPublisher,
-        // AggregateRepository,
+        AggregateRepository,
       ],
     };
   }

@@ -1,10 +1,13 @@
 import { Logger } from '@nestjs/common';
-import { EventSourcingOptions, StorableEvent } from 'event-sourcing-nestjs';
+import {
+  EventSourcingOptions,
+  StorableEvent,
+} from '@berniemac/event-sourcing-nestjs';
 import * as eventstore from 'eventstore';
 import * as url from 'url';
 
-export class EventStore {
-  private readonly logger = new Logger(EventStore.name);
+export class EventStores {
+  private readonly logger = new Logger(EventStores.name);
   private readonly eventstore;
   private readonly config;
   private eventStoreLaunched = false;
@@ -27,28 +30,28 @@ export class EventStore {
     //   ssl = true;
     // }
 
-    this.eventstore = eventstore({
-      type: 'mongodb',
-      host: 'localhost', // optional
-      port: 27017, // optional
-      dbName: 'eventstore', // optional
-      eventsCollectionName: 'events', // optional
-      snapshotsCollectionName: 'snapshots', // optional
-      transactionsCollectionName: 'transactions', // optional
-      timeout: 10000,
-      // useNewUrlParser: true,
-      // keepAlive: true,
-      // useUnifiedTopology: true,
+    // this.eventstore = eventstore({
+    //   type: 'mongodb',
+    //   host: 'localhost', // optional
+    //   port: 27017, // optional
+    //   dbName: 'eventstore', // optional
+    //   eventsCollectionName: 'events', // optional
+    //   snapshotsCollectionName: 'snapshots', // optional
+    //   transactionsCollectionName: 'transactions', // optional
+    //   timeout: 10000,
+    // useNewUrlParser: true,
+    // keepAlive: true,
+    // useUnifiedTopology: true,
 
-      // type: 'redis',
-      // host: 'localhost', // optional
-      // port: 6379, // optional
-      // db: 0, // optional
-      // prefix: 'eventstore', // optional
-      // eventsCollectionName: 'events', // optional
-      // snapshotsCollectionName: 'snapshots', // optional
-      // timeout: 10000,
-    });
+    // type: 'redis',
+    // host: 'localhost', // optional
+    // port: 6379, // optional
+    // db: 0, // optional
+    // prefix: 'eventstore', // optional
+    // eventsCollectionName: 'events', // optional
+    // snapshotsCollectionName: 'snapshots', // optional
+    // timeout: 10000,
+    // });
 
     this.eventstore.init((err) => {
       if (err) {
@@ -56,7 +59,6 @@ export class EventStore {
       }
       this.eventStoreLaunched = true;
     });
-    console.log(this.eventstore);
     this.logger.verbose('Connection Established');
   }
 

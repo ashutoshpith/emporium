@@ -1,4 +1,7 @@
-import { AuthEvent } from '@core/core/event-sourcing/domain-event';
+import {
+  IdentityCreatedEvent,
+  IdentityUpdatedEvent,
+} from '@core/core/event-sourcing/domain-event';
 import { IModel, IModelState } from '@core/core/model';
 import { Logger } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
@@ -6,13 +9,14 @@ import { AggregateRoot } from '@nestjs/cqrs';
 export interface IIdentityModel extends IModelState {
   firstName: string;
   lastName: string;
+  phnNumber: string;
 }
 
 export class IdentityModel
   extends AggregateRoot
   implements IModel<IIdentityModel>
 {
-  private readonly logger = new Logger(IdentityModel.name);
+  // private readonly logger = new Logger(IdentityModel.name);
   isNew = true;
   state: IIdentityModel = {} as any;
 
@@ -21,13 +25,28 @@ export class IdentityModel
     this.state._id = _id;
   }
 
-  createEntry(triggeredBy: string, input: any): void {
-    this.logger.log('createEntry');
-    this.apply(new AuthEvent(triggeredBy, this.state._id, input, []));
+  create(triggeredBy: string, input: any): void {
+    // this.logger.log('createEntry');
+    this.apply(
+      new IdentityCreatedEvent(triggeredBy, this.state._id, input, []),
+    );
+    return;
   }
 
-  onAuthEvent(event: AuthEvent) {
-    this.state.firstName = event.input.firstName;
-    this.state.lastName = event.input.lastName;
+  onIdentityCreatedEvent(event: IdentityCreatedEvent) {
+    this.isNew = false;
+    this.state.lastName = event.input.firstName;
+    this.state.firstName = event.input.lastName;
+  }
+
+  updateEntry(triggeredBy: string, input: any): boolean {
+    this.apply(
+      new IdentityUpdatedEvent(triggeredBy, this.state._id, input, []),
+    );
+    return true;
+  }
+
+  onIdentityUpdatedEvent(event: IdentityUpdatedEvent) {
+    this.state.phnNumber = event.input.phnNumber;
   }
 }

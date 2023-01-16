@@ -1,12 +1,13 @@
-// import { EventStore } from 'event-sourcing-nestjs';
-import { Injectable } from '@nestjs/common';
+import { EventStore } from '@berniemac/event-sourcing-nestjs';
+import { Injectable, Logger } from '@nestjs/common';
 import { EventBus, IEvent, IEventBus } from '@nestjs/cqrs';
 import { KafkaProducer } from '../message-broker/kafka.producer';
 import { DomainEvent } from './domain-event';
-import { EventStore } from './es';
+// import { EventStore } from './es';
 
 @Injectable()
 export class DomainEventBus implements IEventBus {
+  private readonly logger = new Logger(DomainEventBus.name);
   constructor(
     private readonly eventStore: EventStore,
     private readonly eventBus: EventBus,
@@ -26,7 +27,7 @@ export class DomainEventBus implements IEventBus {
       payload: domainEvent,
       event: domainEvent.eventName,
     };
-
+    this.logger.verbose('Publish');
     this.eventStore
       .storeEvent(domainEvent)
       .then(() => this.kafkaProducer.emitEvent(data))

@@ -1,8 +1,8 @@
 import { BaseRepo } from '@core/core/db';
-import { DomainEvent } from '@core/core/event-sourcing/domain-event';
-import { EventStore } from '@core/core/event-sourcing/es';
+// import { EventStore } from '@core/core/event-sourcing/es';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventStore } from '@berniemac/event-sourcing-nestjs';
 import { Model } from 'mongoose';
 import { IdentityModel } from './identity-model';
 import { Identity, TIdentity } from './identity.schema';
@@ -20,12 +20,7 @@ export class IdentityRepo extends BaseRepo<TIdentity> {
     const model = new IdentityModel(_id);
     const getEvents = await this.eventStore.getEvents(IdentityModel.name, _id);
     const events = getEvents.events;
-    console.log('events', events, getEvents);
-
     model.loadFromHistory(events);
-    console.log('end');
-
     return model;
-    return;
   }
 }

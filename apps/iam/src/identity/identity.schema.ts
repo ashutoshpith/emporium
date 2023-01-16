@@ -8,6 +8,9 @@ export class Identity {
 
   @Prop()
   lastName: string;
+
+  @Prop()
+  phnNumber: string;
 }
 
 export type TIdentity = Identity & Document;
