@@ -36,3 +36,11 @@ export class IdentityUpdatedEvent extends StorableEvent {
     super();
   }
 }
+
+export class PlayCreatedEvent extends StorableEvent {
+  eventAggregate = IdentityModel.name;
+  eventVersion = 1;
+  constructor(public triggeredBy: string, public id: string) {
+    super();
+  }
+}

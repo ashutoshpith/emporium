@@ -62,6 +62,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/iam/tsconfig.app.json"
       }
+    },
+    "play": {
+      "type": "application",
+      "root": "apps/play",
+      "entryFile": "main",
+      "sourceRoot": "apps/play/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/play/tsconfig.app.json"
+      }
     }
   }
 }
